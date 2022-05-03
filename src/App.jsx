@@ -1,7 +1,7 @@
 function App() {
   return (
     <div>
-      <div>Hello</div>
+      <div className="display-3 text-center border p-3">Card Game</div>
     </div>
   );
 }

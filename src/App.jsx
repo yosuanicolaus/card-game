@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Deck } from "./Deck";
 
 export const deckAPI = axios.create({

@@ -1,34 +1,39 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useQuery } from "react-query";
+import { Deck } from "./Deck";
+
+export const deckAPI = axios.create({
+  baseURL: "http://deckofcardsapi.com/api/deck/",
+});
 
 function App() {
+  const [deckIds, setDeckIds] = useState([]);
+
+  const createDeck = async () => {
+    const deckId = await createDeckId();
+    setDeckIds((deckIds) => [...deckIds, deckId]);
+  };
+
   return (
     <div className="text-center">
       <div className="h1 border">Card Game</div>
-      <Deck />
+      <button className="btn btn-primary" onClick={createDeck}>
+        Create Deck
+      </button>
+      {deckIds.map((deckId) => (
+        <Deck key={deckId} deckId={deckId} />
+      ))}
     </div>
   );
 }
 
-function Deck() {
-  const { isLoading, error, data } = useQuery("deck", () =>
-    axios("http://deckofcardsapi.com/api/deck/new/")
-  );
-
-  if (isLoading) return <div>loading deck...</div>;
-  if (error) return <div>{JSON.stringify(error)}</div>;
-
-  return (
-    data && (
-      <div className="bg-secondary m-3">
-        <h3>Deck</h3>
-        <div>ID : {data.data.deck_id}</div>
-        <div>remaining : {data.data.remaining}</div>
-        <div>{data.data.shuffled ? "shuffled" : "not shuffled"}</div>
-      </div>
-    )
-  );
+async function createDeckId() {
+  try {
+    const data = await deckAPI.get("new/");
+    return data.data.deck_id;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export default App;

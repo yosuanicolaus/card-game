@@ -3,6 +3,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./routes/home/Home";
+import Room from "./routes/room/Room";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +19,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <Router>
+        <App />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/room/:id" element={<Room />} />
+        </Routes>
+      </Router>
     </QueryClientProvider>
   </React.StrictMode>
 );

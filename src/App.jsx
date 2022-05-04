@@ -1,10 +1,6 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { Deck } from "./Deck";
-
-export const deckAPI = axios.create({
-  baseURL: "http://deckofcardsapi.com/api/deck/",
-});
+import { createDeckId } from "./helper/API";
 
 function App() {
   const [deckIds, setDeckIds] = useState([]);
@@ -27,13 +23,13 @@ function App() {
   );
 }
 
-async function createDeckId() {
-  try {
-    const data = await deckAPI.get("new/");
-    return data.data.deck_id;
-  } catch (error) {
-    console.log(error);
-  }
-}
+// async function createDeckId() {
+//   try {
+//     const data = await deckAPI.get("new/");
+//     return data.data.deck_id;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 export default App;

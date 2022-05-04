@@ -6,6 +6,18 @@ function PlayModal() {
   const [deckCount, setDeckCount] = useState(1);
   const [shuffled, setShuffled] = useState(true);
 
+  const openModal = () => {
+    setOpen(() => true);
+    setDeckCount(() => 1);
+    setShuffled(() => true);
+  };
+
+  const updateDeckCount = (e) => {
+    let newValue = Number(e.target.value);
+    if (newValue < 1) newValue = 1;
+    setDeckCount(() => newValue);
+  };
+
   const createRoom = () => {
     console.log({ deckCount, shuffled });
   };
@@ -14,7 +26,7 @@ function PlayModal() {
     <>
       <button
         className="btn btn-outline-light btn-lg m-4 px-4"
-        onClick={() => setOpen(true)}
+        onClick={openModal}
       >
         Play
       </button>
@@ -27,10 +39,10 @@ function PlayModal() {
               type="number"
               name="deckCount"
               id="deckCount"
-              className="ms-auto"
+              className="ms-auto px-1"
               defaultValue={1}
               min={1}
-              onChange={(e) => setDeckCount(e.target.value)}
+              onChange={updateDeckCount}
             />
           </div>
           <div>

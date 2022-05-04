@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { createDeckId } from "../../helper/API";
+import { useNavigate } from "react-router-dom";
 
 function PlayModal() {
   const [open, setOpen] = useState(false);
   const [deckCount, setDeckCount] = useState(1);
   const [shuffled, setShuffled] = useState(true);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setOpen(() => true);
@@ -19,7 +22,9 @@ function PlayModal() {
   };
 
   const createRoom = () => {
-    console.log({ deckCount, shuffled });
+    createDeckId(shuffled, deckCount).then((data) => {
+      navigate(`/room/${data}`);
+    });
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { deckAPI } from "./helper/API";
+import { deckAPI } from "../helper/API";
 
 export function Deck({ deckId }) {
   // const [table, setTable] = useState([]);

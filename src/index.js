@@ -1,7 +1,6 @@
 import "bootswatch/dist/darkly/bootstrap.min.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./routes/home/Home";
@@ -20,7 +19,6 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Router>
-        <App />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/room/:id" element={<Room />} />

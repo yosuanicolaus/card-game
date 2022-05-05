@@ -15,3 +15,13 @@ export async function createDeckId(shuffled, deckCount) {
     console.log(error);
   }
 }
+
+export async function drawFromDeck(deckId, drawCount) {
+  try {
+    const key = `${deckId}/draw/?count=${drawCount}`;
+    const data = await deckAPI.get(key);
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

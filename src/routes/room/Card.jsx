@@ -1,10 +1,15 @@
 const back =
   "https://i.pinimg.com/originals/31/a6/47/31a647160bb8313551a692b796feeb7e.jpg";
 
-function Card({ image = back, code }) {
+function Card({ image = back, code, hidden = false }) {
   return (
     <>
-      <img src={image} alt={`${code} card`} className="img-fluid" width={100} />
+      <img
+        src={hidden ? back : image}
+        alt={hidden ? "hidden card" : `${code} card`}
+        className="img-fluid"
+        width={100}
+      />
     </>
   );
 }

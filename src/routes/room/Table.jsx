@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { drawFromDeck, reshuffleDeck } from "../../helper/API";
 
-export function useTable(id) {
+export function useDeck(id) {
   const [remaining, setRemaining] = useState(0);
   const [player, setPlayer] = useState([]);
   const [dealer, setDealer] = useState([]);

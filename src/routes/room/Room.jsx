@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useTable } from "./Table";
+import { useDeck } from "./Table";
 import Exit from "./Exit";
 import Card from "./Card";
+import StartModal from "./StartModal";
 
 function Room() {
   const { id } = useParams();
   const { remaining, dealer, player, drawDealer, drawPlayer, reset } =
-    useTable(id);
+    useDeck(id);
 
   const initialDraw = async () => {
     await drawDealer(2);
@@ -34,6 +35,7 @@ function Room() {
 
   return (
     <>
+      <StartModal />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">

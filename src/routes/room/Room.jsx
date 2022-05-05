@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import Card from "./Card";
+import Exit from "./Exit";
 
 function Room() {
   const { id } = useParams();
@@ -20,9 +21,7 @@ function Room() {
             <div>Remaining : 52</div>
           </div>
           <div className="col d-flex">
-            <button className="btn btn-outline-danger ms-auto my-1">
-              Exit
-            </button>
+            <Exit />
           </div>
         </div>
         <div className="row">

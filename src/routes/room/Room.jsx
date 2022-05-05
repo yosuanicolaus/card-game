@@ -2,24 +2,32 @@ import { useParams } from "react-router-dom";
 import { useTable } from "./Table";
 import Card from "./Card";
 import Exit from "./Exit";
+import { useEffect } from "react";
 
 function Room() {
   const { id } = useParams();
   const { remaining, player, dealer, drawPlayer, drawDealer } = useTable(id);
 
+  const initialDraw = async () => {
+    await drawDealer(2);
+    await drawPlayer(2);
+  };
+
+  useEffect(() => {
+    initialDraw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // for testing purposes
   const test = () => {
-    drawPlayer(1);
-    drawDealer(3);
+    initialDraw();
   };
   const test2 = () => {
-    console.table({ player, dealer });
+    drawPlayer(1);
   };
 
   return (
     <>
-      {/* <div className="display-5">Room {id}</div> */}
-
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">
@@ -32,8 +40,13 @@ function Room() {
         </div>
         <div className="row">
           <div className="col border-bottom border-3 pb-2 d-flex justify-content-center gap-2">
-            <Card />
-            <Card />
+            {dealer.map((card, idx) => (
+              <Card
+                image={card.image}
+                key={card.code}
+                hidden={idx === 0 ? true : false}
+              />
+            ))}
           </div>
         </div>
         <div className="row my-auto">
@@ -41,22 +54,28 @@ function Room() {
         </div>
         <div className="row">
           <div className="col border-top border-3 pt-2 d-flex justify-content-center gap-2">
-            <Card />
-            <Card />
+            {player.map((card) => (
+              <Card image={card.image} key={card.code} />
+            ))}
           </div>
         </div>
         <div className="row justify-content-center">
-          <button className="col-1 btn btn-outline-warning m-2">Hit</button>
+          <button
+            className="col-1 btn btn-outline-warning m-2"
+            onClick={() => drawPlayer(1)}
+          >
+            Hit
+          </button>
           <button className="col-1 btn btn-outline-light m-2">Stand</button>
         </div>
       </div>
 
       {/* for testing purposes */}
       <button className="btn btn-outline-info w-50" onClick={test}>
-        draw and give
+        test
       </button>
       <button className="btn btn-outline-info w-50" onClick={test2}>
-        log data
+        test 2
       </button>
     </>
   );

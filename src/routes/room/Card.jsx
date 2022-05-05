@@ -6,7 +6,7 @@ function Card({ image = back, code, hidden = false }) {
     <>
       <img
         src={hidden ? back : image}
-        alt={hidden ? "hidden card" : `${code} card`}
+        alt={"loading card..."}
         className="img-fluid"
         width={100}
       />

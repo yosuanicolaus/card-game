@@ -1,21 +1,27 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTable } from "./Table";
-import Card from "./Card";
 import Exit from "./Exit";
-import { useEffect } from "react";
+import Card from "./Card";
 
 function Room() {
   const { id } = useParams();
-  const { remaining, player, dealer, drawPlayer, drawDealer } = useTable(id);
+  const { remaining, dealer, player, drawDealer, drawPlayer, reset } =
+    useTable(id);
 
   const initialDraw = async () => {
     await drawDealer(2);
     await drawPlayer(2);
   };
 
+  const resetGame = async () => {
+    await reset();
+    await initialDraw();
+  };
+
   useEffect(() => {
     initialDraw();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   // for testing purposes
@@ -23,7 +29,7 @@ function Room() {
     initialDraw();
   };
   const test2 = () => {
-    drawPlayer(1);
+    resetGame();
   };
 
   return (
@@ -59,14 +65,22 @@ function Room() {
             ))}
           </div>
         </div>
-        <div className="row justify-content-center">
+        <div className="row py-2 justify-content-center">
           <button
-            className="col-1 btn btn-outline-warning m-2"
+            className="col-lg-2 col-md-3 col-4 btn btn-outline-warning"
             onClick={() => drawPlayer(1)}
           >
             Hit
           </button>
-          <button className="col-1 btn btn-outline-light m-2">Stand</button>
+          <button className="col-lg-2 col-md-3 col-4 btn btn-outline-success">
+            Stand
+          </button>
+          <button
+            className="col-lg-2 col-md-3 col-4 btn btn-outline-danger"
+            onClick={resetGame}
+          >
+            Forfeit
+          </button>
         </div>
       </div>
 

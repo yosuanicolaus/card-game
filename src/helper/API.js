@@ -25,3 +25,13 @@ export async function drawFromDeck(deckId, drawCount) {
     console.log(error);
   }
 }
+
+export async function reshuffleDeck(deckId) {
+  try {
+    const key = `${deckId}/shuffle/`;
+    const data = await deckAPI.get(key);
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

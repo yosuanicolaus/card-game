@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { drawFromDeck } from "../../helper/API";
+import { drawFromDeck, reshuffleDeck } from "../../helper/API";
 
 export function useTable(id) {
-  const [remaining, setRemaining] = useState(52);
+  const [remaining, setRemaining] = useState(0);
   const [player, setPlayer] = useState([]);
   const [dealer, setDealer] = useState([]);
 
@@ -18,5 +18,12 @@ export function useTable(id) {
     setDealer((dealer) => dealer.concat([...data.cards]));
   };
 
-  return { remaining, player, dealer, drawPlayer, drawDealer };
+  const reset = async () => {
+    const data = await reshuffleDeck(id);
+    setRemaining(() => data.remaining);
+    setPlayer(() => []);
+    setDealer(() => []);
+  };
+
+  return { remaining, dealer, player, drawDealer, drawPlayer, reset };
 }

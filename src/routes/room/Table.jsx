@@ -10,6 +10,8 @@ export function useDeck(id) {
   const [dealerPoint, setDealerPoint] = useState(0);
   const [playerBank, setPlayerBank] = useState(200);
   const [dealerBank, setDealerBank] = useState(10000);
+  const [gameWin, setGameWin] = useState(false);
+  const [gameLose, setGameLose] = useState(false);
 
   const drawPlayer = async (drawCount = 1) => {
     const data = await drawFromDeck(id, drawCount);
@@ -32,8 +34,12 @@ export function useDeck(id) {
   }, [dealer]);
 
   useEffect(() => {
-    console.log({ playerPoint, dealerPoint });
-  }, [playerPoint, dealerPoint]);
+    if (playerPoint > 21) setGameLose(() => true);
+  }, [playerPoint]);
+
+  useEffect(() => {
+    if (dealerPoint > 21) setGameWin(() => true);
+  }, [dealerPoint]);
 
   const reset = async () => {
     const data = await reshuffleDeck(id);
@@ -42,7 +48,20 @@ export function useDeck(id) {
     setDealer(() => []);
     setPlayerPoint(() => 0);
     setDealerPoint(() => 0);
+    setGameWin(() => false);
+    setGameLose(() => false);
   };
 
-  return { remaining, dealer, player, drawDealer, drawPlayer, reset };
+  return {
+    remaining,
+    dealer,
+    player,
+    drawDealer,
+    drawPlayer,
+    playerPoint,
+    dealerPoint,
+    gameWin,
+    gameLose,
+    reset,
+  };
 }

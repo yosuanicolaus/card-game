@@ -3,13 +3,25 @@ import { useParams } from "react-router-dom";
 import { useDeck } from "./Table";
 import Exit from "./Exit";
 import Card from "./Card";
-import StartModal from "./StartModal";
+import StartModal from "./Modals/StartModal";
+import LoseModal from "./Modals/LoseModal";
+import WinModal from "./Modals/WinModal";
 
 function Room() {
   const { id } = useParams();
   const [openStart, setOpenStart] = useState(true);
-  const { remaining, dealer, player, drawDealer, drawPlayer, reset } =
-    useDeck(id);
+  const {
+    remaining,
+    dealer,
+    player,
+    drawDealer,
+    drawPlayer,
+    reset,
+    playerPoint,
+    dealerPoint,
+    gameLose,
+    gameWin,
+  } = useDeck(id);
 
   const initialDraw = async () => {
     setOpenStart(() => false);
@@ -22,22 +34,16 @@ function Room() {
     setOpenStart(() => true);
   };
 
-  useEffect(() => {
-    initialDraw();
-    // eslint-disable-next-line
-  }, []);
-
-  // for testing purposes
-  const test = () => {
-    initialDraw();
-  };
-  const test2 = () => {
-    resetGame();
-  };
+  // useEffect(() => {
+  //   initialDraw();
+  //   // eslint-disable-next-line
+  // }, []);
 
   return (
     <>
       <StartModal initialDraw={initialDraw} openStart={openStart} />
+      <LoseModal openBust={gameLose} resetGame={resetGame} />
+      <WinModal openWin={gameWin} resetGame={resetGame} />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">
@@ -87,14 +93,6 @@ function Room() {
           </button>
         </div>
       </div>
-
-      {/* for testing purposes */}
-      <button className="btn btn-outline-info w-50" onClick={test}>
-        test
-      </button>
-      <button className="btn btn-outline-info w-50" onClick={test2}>
-        test 2
-      </button>
     </>
   );
 }

@@ -1,11 +1,11 @@
 import { Modal, ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 
-function LoseModal({ openLose, resetGame, playerPoint, dealerPoint }) {
+function LoseModal({ openLose, resetGame, playerPoint, dealerPoint, bet }) {
   return (
     <Modal isOpen={openLose} centered>
       <ModalHeader>You Lose</ModalHeader>
       <ModalBody>
-        <div>Oops! You lost</div>
+        <div>Oops! You lost ${bet}</div>
         <div>player's point: {playerPoint}</div>
         <div>dealer's point: {dealerPoint}</div>
       </ModalBody>

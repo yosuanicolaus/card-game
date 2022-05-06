@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDeck, useBank } from "./Table";
 import Exit from "./Exit";
@@ -10,6 +11,7 @@ import WinModal from "./Modals/WinModal";
 function Room() {
   const { id } = useParams();
   const [openStart, setOpenStart] = useState(true);
+  const [bet, setBet] = useState(0);
   const { playerBank, dealerBank, playerWin, dealerWin } = useBank(200, 55555);
   const {
     remaining,
@@ -24,7 +26,8 @@ function Room() {
     gameWin,
   } = useDeck(id);
 
-  const initialDraw = async () => {
+  const initialDraw = async (bet) => {
+    setBet(() => bet);
     setOpenStart(() => false);
     await drawDealer(2);
     await drawPlayer(2);
@@ -34,6 +37,14 @@ function Room() {
     await reset();
     setOpenStart(() => true);
   };
+
+  useEffect(() => {
+    if (gameLose) dealerWin(bet);
+  }, [gameLose]);
+
+  useEffect(() => {
+    if (gameWin) playerWin(bet);
+  }, [gameWin]);
 
   return (
     <>
@@ -48,12 +59,14 @@ function Room() {
         openLose={gameLose}
         playerPoint={playerPoint}
         dealerPoint={dealerPoint}
+        bet={bet}
       />
       <WinModal
         openWin={gameWin}
         resetGame={resetGame}
         playerPoint={playerPoint}
         dealerPoint={dealerPoint}
+        bet={bet}
       />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { drawFromDeck, reshuffleDeck } from "../../helper/API";
 import { convertValues } from "../../helper/Calculator";
@@ -10,6 +11,8 @@ export function useDeck(id) {
   const [dealerPoint, setDealerPoint] = useState(0);
   const [gameWin, setGameWin] = useState(false);
   const [gameLose, setGameLose] = useState(false);
+  const [gameTie, setGameTie] = useState(false);
+  const [dealerActive, setDealerActive] = useState(false);
 
   const drawPlayer = async (drawCount = 1) => {
     const data = await drawFromDeck(id, drawCount);
@@ -21,6 +24,15 @@ export function useDeck(id) {
     const data = await drawFromDeck(id, drawCount);
     setRemaining(() => data.remaining);
     setDealer((dealer) => dealer.concat([...data.cards]));
+    console.log("drawing cards for dealer");
+  };
+
+  const dealerPhase = () => {
+    if (dealerPoint > playerPoint) {
+      setGameLose(() => true);
+      return;
+    }
+    setDealerActive(() => true);
   };
 
   useEffect(() => {
@@ -29,6 +41,7 @@ export function useDeck(id) {
 
   useEffect(() => {
     setDealerPoint(() => convertValues(dealer));
+    console.log("setting dealer points");
   }, [dealer]);
 
   useEffect(() => {
@@ -36,8 +49,40 @@ export function useDeck(id) {
   }, [playerPoint]);
 
   useEffect(() => {
-    if (dealerPoint > 21) setGameWin(() => true);
+    if (dealerPoint > 21) {
+      setGameWin(() => true);
+    } else if (dealerActive) {
+      if (dealerPoint < 17) {
+        console.log(`dealerpoint is ${dealerPoint}, drawing dealer 1 card`);
+        drawDealer(1);
+      } else if (dealerPoint > playerPoint) {
+        console.log("dealer point higher than player, we lose");
+        setGameLose(() => true);
+      } else if (dealerPoint < playerPoint) {
+        console.log("dealer point lower than player, we win");
+        setGameWin(() => true);
+      } else {
+        console.log("tie");
+        setGameTie(() => true);
+      }
+    }
   }, [dealerPoint]);
+
+  useEffect(() => {
+    console.log("uef dealer active...");
+    if (dealerActive) {
+      if (dealerPoint < 17) {
+        drawDealer(1);
+        console.log("drawing dealer");
+      } else if (dealerPoint < playerPoint) {
+        setGameWin(() => true);
+      } else if (dealerPoint > playerPoint) {
+        setGameLose(() => true);
+      } else {
+        setGameTie(() => true);
+      }
+    }
+  }, [dealerActive]);
 
   const reset = async () => {
     const data = await reshuffleDeck(id);
@@ -48,6 +93,8 @@ export function useDeck(id) {
     setDealerPoint(() => 0);
     setGameWin(() => false);
     setGameLose(() => false);
+    setGameTie(() => false);
+    setDealerActive(() => false);
   };
 
   return {
@@ -60,7 +107,9 @@ export function useDeck(id) {
     dealerPoint,
     gameWin,
     gameLose,
+    gameTie,
     reset,
+    dealerPhase,
   };
 }
 

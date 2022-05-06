@@ -7,11 +7,14 @@ import Card from "./Card";
 import StartModal from "./Modals/StartModal";
 import LoseModal from "./Modals/LoseModal";
 import WinModal from "./Modals/WinModal";
+import TieModal from "./Modals/TieModal";
 
 function Room() {
   const { id } = useParams();
   const [openStart, setOpenStart] = useState(true);
   const [bet, setBet] = useState(0);
+  const [firstHide, setFirstHide] = useState(true);
+  const [disableHit, setDisableHit] = useState(false);
   const { playerBank, dealerBank, playerWin, dealerWin } = useBank(200, 55555);
   const {
     remaining,
@@ -24,6 +27,8 @@ function Room() {
     dealerPoint,
     gameLose,
     gameWin,
+    gameTie,
+    dealerPhase,
   } = useDeck(id);
 
   const initialDraw = async (bet) => {
@@ -36,6 +41,14 @@ function Room() {
   const resetGame = async () => {
     await reset();
     setOpenStart(() => true);
+    setFirstHide(() => true);
+    setDisableHit(() => false);
+  };
+
+  const nextPhase = async () => {
+    setFirstHide(() => false);
+    setDisableHit(() => true);
+    dealerPhase();
   };
 
   useEffect(() => {
@@ -68,6 +81,12 @@ function Room() {
         dealerPoint={dealerPoint}
         bet={bet}
       />
+      <TieModal
+        openTie={gameTie}
+        resetGame={resetGame}
+        playerPoint={playerPoint}
+        dealerPoint={dealerPoint}
+      />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">
@@ -84,7 +103,7 @@ function Room() {
               <Card
                 image={card.image}
                 key={card.code}
-                hidden={idx === 0 ? true : false}
+                hidden={idx === 0 ? firstHide : false}
               />
             ))}
           </div>
@@ -103,15 +122,21 @@ function Room() {
           <button
             className="col-lg-2 col-md-3 col-4 btn btn-outline-warning"
             onClick={() => drawPlayer(1)}
+            disabled={disableHit}
           >
             Hit
           </button>
-          <button className="col-lg-2 col-md-3 col-4 btn btn-outline-success">
+          <button
+            className="col-lg-2 col-md-3 col-4 btn btn-outline-success"
+            onClick={nextPhase}
+            disabled={disableHit}
+          >
             Stand
           </button>
           <button
             className="col-lg-2 col-md-3 col-4 btn btn-outline-danger"
             onClick={resetGame}
+            disabled={disableHit}
           >
             Forfeit
           </button>

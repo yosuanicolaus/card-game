@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-function StartModal({ dealerBank, playerBank }) {
-  const [open, setOpen] = useState(true);
-
+function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
   return (
     <>
-      <Modal isOpen={open} centered>
+      <Modal isOpen={openStart} centered>
         <ModalHeader>Initial bet</ModalHeader>
         <ModalBody>
           <div>Place your bet!</div>
@@ -14,7 +12,7 @@ function StartModal({ dealerBank, playerBank }) {
           <div>Your Bank : {playerBank}</div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-info" onClick={() => setOpen(false)}>
+          <button className="btn btn-info" onClick={initialDraw}>
             Start Game
           </button>
         </ModalFooter>

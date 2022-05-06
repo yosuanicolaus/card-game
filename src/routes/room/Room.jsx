@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDeck } from "./Table";
 import Exit from "./Exit";
@@ -7,17 +7,19 @@ import StartModal from "./StartModal";
 
 function Room() {
   const { id } = useParams();
+  const [openStart, setOpenStart] = useState(true);
   const { remaining, dealer, player, drawDealer, drawPlayer, reset } =
     useDeck(id);
 
   const initialDraw = async () => {
+    setOpenStart(() => false);
     await drawDealer(2);
     await drawPlayer(2);
   };
 
   const resetGame = async () => {
     await reset();
-    await initialDraw();
+    setOpenStart(() => true);
   };
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function Room() {
 
   return (
     <>
-      <StartModal />
+      <StartModal initialDraw={initialDraw} openStart={openStart} />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">

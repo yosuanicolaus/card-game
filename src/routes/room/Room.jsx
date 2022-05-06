@@ -8,6 +8,8 @@ import StartModal from "./Modals/StartModal";
 import LoseModal from "./Modals/LoseModal";
 import WinModal from "./Modals/WinModal";
 import TieModal from "./Modals/TieModal";
+import Forfeit from "./Modals/Forfeit";
+import Blackjack from "./Modals/Blackjack";
 
 function Room() {
   const { id } = useParams();
@@ -28,6 +30,9 @@ function Room() {
     gameLose,
     gameWin,
     gameTie,
+    gameForfeit,
+    blackjack,
+    forfeit,
     dealerPhase,
   } = useDeck(id);
 
@@ -36,6 +41,11 @@ function Room() {
     setOpenStart(() => false);
     await drawDealer(2);
     await drawPlayer(2);
+  };
+
+  const playerForfeit = () => {
+    setBet((bet) => Math.floor(bet / 2));
+    forfeit();
   };
 
   const resetGame = async () => {
@@ -58,6 +68,10 @@ function Room() {
   useEffect(() => {
     if (gameWin) playerWin(bet);
   }, [gameWin]);
+
+  useEffect(() => {
+    if (blackjack) playerWin(Math.ceil(bet * 1.5));
+  }, [blackjack]);
 
   return (
     <>
@@ -87,6 +101,12 @@ function Room() {
         playerPoint={playerPoint}
         dealerPoint={dealerPoint}
       />
+      <Forfeit openForfeit={gameForfeit} resetGame={resetGame} bet={bet} />
+      <Blackjack
+        openBlackjack={blackjack}
+        resetGame={resetGame}
+        bet={Math.ceil(bet * 1.5)}
+      />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">
@@ -109,7 +129,9 @@ function Room() {
           </div>
         </div>
         <div className="row my-auto">
-          <div className="col text-center bg-dark py-2 shadow">loading...</div>
+          <div className="col text-center bg-dark py-4 shadow lead">
+            Blackjack
+          </div>
         </div>
         <div className="row">
           <div className="col border-top border-3 pt-2 d-flex justify-content-center gap-2">
@@ -135,7 +157,7 @@ function Room() {
           </button>
           <button
             className="col-lg-2 col-md-3 col-4 btn btn-outline-danger"
-            onClick={resetGame}
+            onClick={playerForfeit}
             disabled={disableHit}
           >
             Forfeit

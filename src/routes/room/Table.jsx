@@ -12,6 +12,8 @@ export function useDeck(id) {
   const [gameWin, setGameWin] = useState(false);
   const [gameLose, setGameLose] = useState(false);
   const [gameTie, setGameTie] = useState(false);
+  const [gameForfeit, setGameForfeit] = useState(false);
+  const [blackjack, setBlackjack] = useState(false);
   const [dealerActive, setDealerActive] = useState(false);
 
   const drawPlayer = async (drawCount = 1) => {
@@ -31,6 +33,10 @@ export function useDeck(id) {
       setGameLose(() => true);
       return;
     }
+    if (playerPoint === 21) {
+      setBlackjack(() => true);
+      return;
+    }
     setDealerActive(() => true);
   };
 
@@ -44,6 +50,10 @@ export function useDeck(id) {
     } else {
       setGameTie(() => true);
     }
+  };
+
+  const forfeit = () => {
+    setGameForfeit(() => true);
   };
 
   useEffect(() => {
@@ -82,6 +92,8 @@ export function useDeck(id) {
     setGameWin(() => false);
     setGameLose(() => false);
     setGameTie(() => false);
+    setGameForfeit(() => false);
+    setBlackjack(() => false);
     setDealerActive(() => false);
   };
 
@@ -96,7 +108,10 @@ export function useDeck(id) {
     gameWin,
     gameLose,
     gameTie,
+    gameForfeit,
+    blackjack,
     reset,
+    forfeit,
     dealerPhase,
   };
 }

@@ -8,8 +8,6 @@ export function useDeck(id) {
   const [dealer, setDealer] = useState([]);
   const [playerPoint, setPlayerPoint] = useState(0);
   const [dealerPoint, setDealerPoint] = useState(0);
-  const [playerBank, setPlayerBank] = useState(200);
-  const [dealerBank, setDealerBank] = useState(10000);
   const [gameWin, setGameWin] = useState(false);
   const [gameLose, setGameLose] = useState(false);
 
@@ -65,3 +63,20 @@ export function useDeck(id) {
     reset,
   };
 }
+
+export const useBank = (playerStart = 200, dealerStart = 10000) => {
+  const [playerBank, setPlayerBank] = useState(playerStart);
+  const [dealerBank, setDealerBank] = useState(dealerStart);
+
+  const playerWin = (bet) => {
+    setPlayerBank((playerBank) => playerBank + bet);
+    setDealerBank((dealerBank) => dealerBank - bet);
+  };
+
+  const dealerWin = (bet) => {
+    setPlayerBank((playerBank) => playerBank - bet);
+    setDealerBank((dealerBank) => dealerBank + bet);
+  };
+
+  return { playerBank, dealerBank, playerWin, dealerWin };
+};

@@ -1,10 +1,14 @@
 import { Modal, ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 
-function LoseModal({ openBust, resetGame }) {
+function LoseModal({ openLose, resetGame, playerPoint, dealerPoint }) {
   return (
-    <Modal isOpen={openBust} centered>
+    <Modal isOpen={openLose} centered>
       <ModalHeader>You Lose</ModalHeader>
-      <ModalBody>Busted</ModalBody>
+      <ModalBody>
+        <div>Oops! You lost</div>
+        <div>player's point: {playerPoint}</div>
+        <div>dealer's point: {dealerPoint}</div>
+      </ModalBody>
       <ModalFooter>
         <button className="btn btn-primary" onClick={resetGame}>
           Play again

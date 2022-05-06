@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDeck } from "./Table";
+import { useDeck, useBank } from "./Table";
 import Exit from "./Exit";
 import Card from "./Card";
 import StartModal from "./Modals/StartModal";
@@ -10,6 +10,7 @@ import WinModal from "./Modals/WinModal";
 function Room() {
   const { id } = useParams();
   const [openStart, setOpenStart] = useState(true);
+  const { playerBank, dealerBank, playerWin, dealerWin } = useBank(200, 55555);
   const {
     remaining,
     dealer,
@@ -34,16 +35,26 @@ function Room() {
     setOpenStart(() => true);
   };
 
-  // useEffect(() => {
-  //   initialDraw();
-  //   // eslint-disable-next-line
-  // }, []);
-
   return (
     <>
-      <StartModal initialDraw={initialDraw} openStart={openStart} />
-      <LoseModal openBust={gameLose} resetGame={resetGame} />
-      <WinModal openWin={gameWin} resetGame={resetGame} />
+      <StartModal
+        initialDraw={initialDraw}
+        openStart={openStart}
+        playerBank={playerBank}
+        dealerBank={dealerBank}
+      />
+      <LoseModal
+        resetGame={resetGame}
+        openLose={gameLose}
+        playerPoint={playerPoint}
+        dealerPoint={dealerPoint}
+      />
+      <WinModal
+        openWin={gameWin}
+        resetGame={resetGame}
+        playerPoint={playerPoint}
+        dealerPoint={dealerPoint}
+      />
       <div className="container-lg bg-secondary min-vh-100 d-flex flex-column">
         <div className="row">
           <div className="col">

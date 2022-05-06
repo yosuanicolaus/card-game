@@ -43,9 +43,8 @@ function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
             className="w-100 text-center"
             min={5}
             max={playerBank}
-            // defaultValue={5}
             value={bet}
-            onChange={(e) => setBet(e.target.value)}
+            onChange={(e) => setBet(Number(e.target.value))}
           />
           <div>
             <input

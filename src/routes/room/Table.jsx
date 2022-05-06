@@ -24,7 +24,6 @@ export function useDeck(id) {
     const data = await drawFromDeck(id, drawCount);
     setRemaining(() => data.remaining);
     setDealer((dealer) => dealer.concat([...data.cards]));
-    console.log("drawing cards for dealer");
   };
 
   const dealerPhase = () => {
@@ -35,13 +34,24 @@ export function useDeck(id) {
     setDealerActive(() => true);
   };
 
+  const dealerAction = () => {
+    if (dealerPoint < 17) {
+      drawDealer(1);
+    } else if (dealerPoint < playerPoint) {
+      setGameWin(() => true);
+    } else if (dealerPoint > playerPoint) {
+      setGameLose(() => true);
+    } else {
+      setGameTie(() => true);
+    }
+  };
+
   useEffect(() => {
     setPlayerPoint(() => convertValues(player));
   }, [player]);
 
   useEffect(() => {
     setDealerPoint(() => convertValues(dealer));
-    console.log("setting dealer points");
   }, [dealer]);
 
   useEffect(() => {
@@ -52,35 +62,13 @@ export function useDeck(id) {
     if (dealerPoint > 21) {
       setGameWin(() => true);
     } else if (dealerActive) {
-      if (dealerPoint < 17) {
-        console.log(`dealerpoint is ${dealerPoint}, drawing dealer 1 card`);
-        drawDealer(1);
-      } else if (dealerPoint > playerPoint) {
-        console.log("dealer point higher than player, we lose");
-        setGameLose(() => true);
-      } else if (dealerPoint < playerPoint) {
-        console.log("dealer point lower than player, we win");
-        setGameWin(() => true);
-      } else {
-        console.log("tie");
-        setGameTie(() => true);
-      }
+      dealerAction();
     }
   }, [dealerPoint]);
 
   useEffect(() => {
-    console.log("uef dealer active...");
     if (dealerActive) {
-      if (dealerPoint < 17) {
-        drawDealer(1);
-        console.log("drawing dealer");
-      } else if (dealerPoint < playerPoint) {
-        setGameWin(() => true);
-      } else if (dealerPoint > playerPoint) {
-        setGameLose(() => true);
-      } else {
-        setGameTie(() => true);
-      }
+      dealerAction();
     }
   }, [dealerActive]);
 

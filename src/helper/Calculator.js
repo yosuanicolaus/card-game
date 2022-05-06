@@ -18,7 +18,7 @@ export const convertValues = (player) => {
     }
   }
   if (value > 21) {
-    while (chance > 0) {
+    while (chance > 0 && value > 21) {
       chance -= 1;
       value -= 10;
     }

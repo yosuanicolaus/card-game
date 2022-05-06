@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const deckAPI = axios.create({
-  baseURL: "http://deckofcardsapi.com/api/deck/",
+  baseURL: "https://deckofcardsapi.com/api/deck/",
 });
 
 export async function createDeckId(shuffled, deckCount) {

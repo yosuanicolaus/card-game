@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import Exit from "../Exit";
+import GameOver from "./GameOver";
 
 function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
   const [bet, setBet] = useState(5);
@@ -24,6 +26,8 @@ function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
     else setBet(() => 5);
   }, [checked, playerBank]);
 
+  if (playerBank === 0) return <GameOver />;
+
   return (
     <>
       <Modal isOpen={openStart} centered>
@@ -39,7 +43,7 @@ function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
             className="w-100 text-center"
             min={5}
             max={playerBank}
-            defaultValue={5}
+            // defaultValue={5}
             value={bet}
             onChange={(e) => setBet(e.target.value)}
           />
@@ -58,6 +62,7 @@ function StartModal({ dealerBank, playerBank, initialDraw, openStart }) {
           <div className="text-danger">{warning}</div>
         </ModalBody>
         <ModalFooter>
+          <Exit />
           <button className="btn btn-info" onClick={startClick}>
             Start Game
           </button>

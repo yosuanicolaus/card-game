@@ -8,7 +8,7 @@ import Room from "./routes/room/Room";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <Router>
+    <Router basename="card-game">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/room/:id" element={<Room />} />
